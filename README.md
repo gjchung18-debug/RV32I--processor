@@ -21,6 +21,8 @@ self-checking testbench rather than manual waveform inspection.
 | Multicycle / pipelined refactor with hazard detection | ⬜ Stretch goal |
 
 ## Repository structure
+
+```text
 .
 ├── rtl/
 │ ├── alu_pkg.sv # Shared parameters/typedefs for ALU
@@ -37,6 +39,8 @@ self-checking testbench rather than manual waveform inspection.
 │ └── tb_self.sv # Top-level self-checking testbench
 ├── .gitignore
 └── README.md
+
+```
 
 ## Test program (`tb/instructions.hex`)
 
