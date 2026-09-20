@@ -1,0 +1,16 @@
+# Exclude individual unit testbenches in root
+tb_alu.sv
+tb_control_unit.sv
+tb_datapath.sv
+tb_imm_gen.sv
+tb_rv32i_self_checking.sv
+
+
+*.vcd
+*.fst
+*.out
+*.log
+*.vpd
+simv*
+csrc/
+work/
