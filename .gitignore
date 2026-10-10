@@ -13,4 +13,5 @@ tb_rv32i_self_checking.sv
 *.vpd
 simv*
 csrc/
-work/
+work/riscv-arch-test/
+riscv-arch-test/

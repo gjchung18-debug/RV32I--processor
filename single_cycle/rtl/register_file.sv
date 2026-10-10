@@ -11,8 +11,8 @@ module register_file (
 
     logic [31:0] regfile [0:31]; // 32 registers each worth 32 bits
 
-    assign rs1_data = regfile[rs1_addr];
-    assign rs2_data = regfile[rs2_addr];
+    assign rs1_data = (rs1_addr == 5'd0) ? 32'd0 : ((rs1_addr == rd_addr) && reg_write) ? rd_data : regfile[rs1_addr];
+    assign rs2_data = (rs2_addr == 5'd0) ? 32'd0 : ((rs2_addr == rd_addr) && reg_write) ? rd_data : regfile[rs2_addr];
 
     initial begin
         for(int i = 0; i < 32; i++) begin

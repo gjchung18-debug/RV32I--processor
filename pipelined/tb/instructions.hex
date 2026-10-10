@@ -1,0 +1,39 @@
+00800117
+123450b7
+0220a223
+0240a303
+000101b3
+00310263
+00000013
+00410463
+00000013
+0080026f
+00000013
+000202e7
+
+
+//00800117
+//123450b7
+//0220a223
+//000101b3
+//00310263
+//00000013
+//00410463
+//00000013
+//0080026f
+//00000013
+//000202e7
+
+
+
+
+
+//FFF00093    00: addi x1, x0, -1        -> x1 = 0xFFFFFFFF (sign-extension check)
+//00200113    04: addi x2, x0, 2         -> x2 = 0x00000002 (shift/compare operand)
+//0020A1B3    08: slt  x3, x1, x2        -> x3 = 0x00000001 (signed: -1 < 2 -> true)
+//0020B233    0C: sltu x4, x1, x2        -> x4 = 0x00000000 (unsigned: 4.29B < 2 -> false)
+//0020D2B3    10: srl  x5, x1, x2        -> x5 = 0x3FFFFFFF (logical: zero-fill from MSB)
+//4020D333    14: sra  x6, x1, x2        -> x6 = 0xFFFFFFFF (arithmetic: sign-fill from MSB)
+
+//iverilog -g2012 -o sim.out rtl/alu_pkg.sv rtl/alu.sv rtl/control_unit.sv rtl/data_mem.sv rtl/datapath.sv rtl/imm_gen.sv rtl/instr_mem.sv rtl/pc_reg.sv rtl/register_file.sv tb/tb_self.sv
+

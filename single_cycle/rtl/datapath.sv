@@ -8,7 +8,7 @@ module datapath (
     logic [31:0] pc_out, instr_out, imm_out, write_back_mux,
     rs1_out, rs2_out, alu_b_mux, alu_result, read_data, sequential_pc_adder, bj_target_adder, next_pc_mux;
 
-    logic zero, mem_read, mem_write, reg_write, alu_src, mem_to_reg, branch, jump, branch_cond;
+    logic zero, mem_read, mem_write, reg_write, alu_src, mem_to_reg, branch, jump, branch_cond, jalr;
 
     alu_op_t alu_ctrl;
 
@@ -39,7 +39,7 @@ module datapath (
 
     assign branch_cond = branch & raw_branch_cond;
 
-    assign next_pc_mux = ((branch & branch_cond) | jump) ? bj_target_adder : sequential_pc_adder;
+    assign next_pc_mux = jalr ? alu_result : ((branch_cond) || jump) ? bj_target_adder : sequential_pc_adder;
 
     instr_mem instr_mem_inst (
         .addr(pc_out),
@@ -72,7 +72,7 @@ module datapath (
         .zero(zero)
     );
 
-    assign write_back_mux = jump ? sequential_pc_adder : mem_to_reg ? read_data : alu_result;
+    assign write_back_mux = (jump || jalr) ? sequential_pc_adder : mem_to_reg ? read_data : alu_result;
 
 
     data_mem data_mem_inst(
@@ -96,6 +96,7 @@ module datapath (
         .mem_to_reg(mem_to_reg),
         .branch(branch),
         .jump(jump),
+        .jalr(jalr),
         .alu_op(alu_ctrl)
     );
 

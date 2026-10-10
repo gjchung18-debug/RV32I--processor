@@ -52,10 +52,75 @@ module tb_self;
 
     initial begin
 
-        @(posedge clk); // wait one time unit to avoid race time issue, so we can compare the updated calculated value in the current clock cycle with the actual value
+        @(posedge clk); #1;
+        rst = 1'b0;
+
+        // 1. AUIPC Check
+        @(posedge clk); #1;
+        check_answer(2, 32'h00800000, "AUIPC: PC relative address");
+        
+        // 2. LUI Check
+        @(posedge clk); #1;
+        check_answer(1, 32'h12345000, "LUI: Upper 20-bit immediate");
+
+        // 3. SW Execution (Cycle N)
+        @(posedge clk); #1;
+
+        // 4. LW Execution (Cycle N+1) -> Wait 1 additional cycle for Register Write-back
+        @(posedge clk); #1;
+        @(posedge clk); #1;
+        check_answer(6, 32'h00800000, "LW: Correct data loaded from memory into x6");
+
+        // 5. ADD Execution
+        @(posedge clk); #1;
+
+        // 6. BEQ Branch Taken Check
+        @(posedge clk); #1; 
+        check_answer(3, 32'h00800000, "Branch: BEQ Taken check");
+
+        // Delay across BNE Not-Taken branch skip logic
+        @(posedge clk); #1;
+        @(posedge clk); #1;
+        @(posedge clk); #1;
+
+        // 7. JAL Check (Wait 2 cycles for register write-back)
+        @(posedge clk); #1;
+        @(posedge clk); #1;
+        check_answer(4, 32'h00000028, "JAL: Correct return address (PC+4)"); // PC shifted by +4 due to inserted LW
+
+        // 8. JALR Check (Wait 2 cycles for register write-back)
+        @(posedge clk); #1;
+        @(posedge clk); #1;
+        check_answer(5, 32'h00000030, "JALR: Correct return address (PC+4)"); // PC shifted by +4 due to inserted LW
+
+        /*@(posedge clk); // wait one time unit to avoid race time issue, so we can compare the updated calculated value in the current clock cycle with the actual value
         #1;
         rst = 1'b0;
 
+        @(posedge clk); #1;
+        check_answer(2, 32'h00800000, "AUIPC: PC relative address");
+        
+        @(posedge clk); #1;
+        check_answer(1, 32'h12345000, "LUI: Upper 20-bit immediate");
+
+        @(posedge clk); #1;
+
+        @(posedge clk); #1; 
+        check_answer(3, 32'h00800000, "Branch: BEQ Taken check");
+
+        @(posedge clk); #1;
+        @(posedge clk); #1;
+        @(posedge clk); #1;
+
+        @(posedge clk); #1;
+        @(posedge clk); #1;
+        check_answer(4, 32'h00000024, "JAL: Correct return address (PC+4)");
+
+        @(posedge clk); #1;
+        @(posedge clk); #1;
+        check_answer(5, 32'h0000002C, "JALR: Correct return address (PC+4)");
+
+        
         // Instr 1: addi x1, x0, -1
         @(posedge clk); #1;
         check_answer(1, 32'hFFFFFFFF, "Immediate Sign-Extension (-1 -> 0xFFFFFFFF)");
@@ -81,6 +146,8 @@ module tb_self;
         // Instr 6: sra x6, x1, x2 (arithmetic: sign-fill, top 2 bits stay 1)
         @(posedge clk); #1;
         check_answer(6, 32'hFFFFFFFF, "SRA Sign-Preserving Shift Right");
+
+        */ 
 
         @(posedge clk); 
         #1;

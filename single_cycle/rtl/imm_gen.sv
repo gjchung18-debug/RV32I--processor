@@ -3,6 +3,10 @@ module imm_gen (
     output logic [31:0] imm_out //sign-extended
 );
 
+    initial begin
+        imm_out = 32'd0;
+    end
+
     always_comb begin
         case(instr[6:0])
         7'b0010011, // I-type
@@ -24,6 +28,7 @@ module imm_gen (
         7'b0110111: begin // U-type
             imm_out = {instr[31:12], {12{1'b0}}};
         end
+        default: imm_out = 32'd0;
         endcase
     end
 

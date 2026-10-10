@@ -10,7 +10,7 @@ module instr_mem (
         for(int i = 0; i < 1024; i++) begin
             mem[i] = 32'd0;
         end
-        $readmemh("instructions.hex", mem);
+        $readmemh("tb/pipelined.hex", mem);
     end
 
     assign instr = mem[addr[31:2]];

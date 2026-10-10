@@ -10,6 +10,7 @@ module control_unit (
     output logic mem_to_reg, // 1 for rg[] = mem[]
     output logic branch,
     output logic jump,
+    output logic jalr,
     output alu_op_t alu_op
 );
 
@@ -23,6 +24,7 @@ module control_unit (
         branch = 1'b0;
         jump = 1'b0;
         alu_op = ADD;
+        jalr = 1'b0;
         case(opcode)
         7'b0110011: begin // R-type
             reg_write = 1'b1;
@@ -77,9 +79,11 @@ module control_unit (
         7'b1101111: begin
             jump = 1'b1;
             reg_write = 1'b1;
+            alu_src = 1'b1;
+            alu_op = ADD;
         end
         7'b1100111: begin
-            jump = 1'b1;
+            jalr = 1'b1;
             reg_write = 1'b1;
             alu_src = 1'b1;
             alu_op = ADD;
