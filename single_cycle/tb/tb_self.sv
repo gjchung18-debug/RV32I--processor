@@ -93,62 +93,6 @@ module tb_self;
         @(posedge clk); #1;
         check_answer(5, 32'h00000030, "JALR: Correct return address (PC+4)"); // PC shifted by +4 due to inserted LW
 
-        /*@(posedge clk); // wait one time unit to avoid race time issue, so we can compare the updated calculated value in the current clock cycle with the actual value
-        #1;
-        rst = 1'b0;
-
-        @(posedge clk); #1;
-        check_answer(2, 32'h00800000, "AUIPC: PC relative address");
-        
-        @(posedge clk); #1;
-        check_answer(1, 32'h12345000, "LUI: Upper 20-bit immediate");
-
-        @(posedge clk); #1;
-
-        @(posedge clk); #1; 
-        check_answer(3, 32'h00800000, "Branch: BEQ Taken check");
-
-        @(posedge clk); #1;
-        @(posedge clk); #1;
-        @(posedge clk); #1;
-
-        @(posedge clk); #1;
-        @(posedge clk); #1;
-        check_answer(4, 32'h00000024, "JAL: Correct return address (PC+4)");
-
-        @(posedge clk); #1;
-        @(posedge clk); #1;
-        check_answer(5, 32'h0000002C, "JALR: Correct return address (PC+4)");
-
-        
-        // Instr 1: addi x1, x0, -1
-        @(posedge clk); #1;
-        check_answer(1, 32'hFFFFFFFF, "Immediate Sign-Extension (-1 -> 0xFFFFFFFF)");
-
-        // Instr 2: addi x2, x0, 2
-        @(posedge clk); #1;
-        check_answer(2, 32'h00000002, "Setup x2 = +2 (compare/shift operand)");
-
-        // --- EDGE CASE: SLT vs SLTU on Negative Operand ---
-        // Instr 3: slt x3, x1, x2 (signed: -1 < 2 -> true)
-        @(posedge clk); #1;
-        check_answer(3, 32'h00000001, "SLT Signed Comparison (-1 < 2 is True)");
-
-        // Instr 4: sltu x4, x1, x2 (unsigned: 0xFFFFFFFF < 2 -> false)
-        @(posedge clk); #1;
-        check_answer(4, 32'h00000000, "SLTU Unsigned Comparison (4.29B < 2 is False)");
-
-        // --- EDGE CASE: SRA vs SRL Sign-Extension on Negative Operand ---
-        // Instr 5: srl x5, x1, x2 (logical: zero-fill, top 2 bits become 0)
-        @(posedge clk); #1;
-        check_answer(5, 32'h3FFFFFFF, "SRL Zero-Fill Shift Right (No Sign Extension)");
-
-        // Instr 6: sra x6, x1, x2 (arithmetic: sign-fill, top 2 bits stay 1)
-        @(posedge clk); #1;
-        check_answer(6, 32'hFFFFFFFF, "SRA Sign-Preserving Shift Right");
-
-        */ 
-
         @(posedge clk); 
         #1;
         $display("Error count = %d", error_count);
